@@ -1,0 +1,51 @@
+---
+- name: Ensure that the dnf-automatic package is installed
+  become: true
+  dnf:
+    name: dnf-automatic
+    state: present
+  register: dnf_automatic_dnf
+
+- name: Update command section
+  ini_file:
+    path: "{{ au_configfile_path }}"
+    section: commands
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  loop:
+    - { option: 'upgrade_type', value: "{{ au_upgrade_type }}"}
+    - { option: 'download_updates', value: "{{ au_download_updates }}"}
+    - { option: 'random_sleep', value: "{{ au_random_sleep }}"}
+    - { option: 'apply_updates', value: "{{ au_apply_updates }}"}
+  when: dnf_automatic_dnf is success
+
+- name: Update emitters section
+  ini_file:
+    path: "{{ au_configfile_path }}"
+    section: emitters
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  loop:
+    - { option: 'system_name', value: "{{ au_system_name }}"}
+    - { option: 'emit_via', value: "{{ au_emit_via }}"}
+  when: dnf_automatic_dnf is success
+
+- name: Update email section
+  ini_file:
+    path: "{{ au_configfile_path }}"
+    section: email
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  loop:
+    - { option: 'email_to', value: "{{ au_email_to }}"}
+    - { option: 'email_from', value: "{{ au_email_from }}"}
+    - { option: 'email_host', value: "{{ au_email_host }}"}
+  when: dnf_automatic_dnf is success
+
+- name: Enable and start the dnf-automatic service on boot
+  become: true
+  service:
+    enabled: yes
+    name: dnf-automatic.timer
+    state: started
+  when: dnf_automatic_dnf is success

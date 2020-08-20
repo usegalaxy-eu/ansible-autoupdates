@@ -1,0 +1,16 @@
+au_hostname: localhost
+au_configfile_path: /etc/dnf/automatic.conf
+
+# Configuration
+## commands section
+au_upgrade_type: security
+au_download_updates: yes
+au_apply_updates: no
+au_random_sleep: 0
+## emitters section
+au_system_name: "{{ au_hostname }}"
+au_emit_via: motd
+## email
+au_email_to: root
+au_email_from: "{{ au_email_to }}@{{ au_hostname }}"
+au_email_host: localhost
