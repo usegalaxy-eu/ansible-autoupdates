@@ -1,0 +1,19 @@
+---
+galaxy_info:
+  author: Galaxy Europe
+  description: Setup Automatic Update using Dnf-automatic on CentOS systems
+  company: Galaxy Europe
+  license: GPL-3.0
+  min_ansible_version: 2.5
+  role_name: autoupdates
+  platforms:
+  - name: EL
+    versions:
+    - all
+  - name: Fedora
+    versions:
+    - all
+  galaxy_tags:
+  - system
+dependencies: []
+allow_duplicates: yes
